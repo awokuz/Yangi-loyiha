@@ -1,1 +1,1499 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilimdan Hayotga — Amaliy Innovatsion Ta'lim Loyihasi</title>
+    <meta name="description" content="Xorazm viloyati Qo'shko'pir tumani 2-son maktabining amaliy innovatsion ta'lim loyihasi">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            background: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* ============ LOADING SCREEN ============ */
+        .preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #10b981);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-logo {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 5px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .preloader-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .preloader-bar::after {
+            content: '';
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            animation: loading 1.2s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(350%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ============ FLOATING SHAPES ============ */
+        .floating-shapes {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px; height: 80px;
+            top: 20%; left: 10%;
+            animation-delay: 0s;
+        }
+        .shape:nth-child(2) {
+            width: 120px; height: 120px;
+            top: 60%; left: 80%;
+            animation-delay: 2s;
+        }
+        .shape:nth-child(3) {
+            width: 60px; height: 60px;
+            top: 80%; left: 30%;
+            animation-delay: 4s;
+        }
+        .shape:nth-child(4) {
+            width: 100px; height: 100px;
+            top: 30%; left: 70%;
+            animation-delay: 6s;
+        }
+        .shape:nth-child(5) {
+            width: 50px; height: 50px;
+            top: 50%; left: 50%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -40px) rotate(90deg); }
+            50% { transform: translate(-20px, 30px) rotate(180deg); }
+            75% { transform: translate(40px, 20px) rotate(270deg); }
+        }
+
+        /* ============ HERO SECTION ============ */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #10b981 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            padding: 80px 20px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('images/1.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            opacity: 0;
+            animation: fadeInDown 1s ease forwards 0.3s;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.6s;
+            background: linear-gradient(90deg, #fff, #fbbf24, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease forwards 0.6s, shine 3s linear infinite 1.6s;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .hero .slogan {
+            font-size: 1.3rem;
+            font-style: italic;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.9s;
+        }
+
+        .hero-school {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 1.2s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO IMAGE */
+        .hero-image {
+            max-width: 1200px;
+            margin: -60px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            transition: transform 0.6s ease;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.02);
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title .label {
+            color: var(--secondary);
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-top: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        .section-title.reveal h2::after {
+            width: 80px;
+        }
+
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(245, 158, 11, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* ABOUT SECTION */
+        .about {
+            background: white;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            color: #475569;
+            font-size: 1.05rem;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 20px;
+            bottom: 20px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 20px;
+            z-index: -1;
+            transition: all 0.5s;
+        }
+
+        .about-image:hover::before {
+            top: -10px;
+            left: -10px;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.5s;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.02);
+        }
+
+        /* PROCESS / 5 STEPS */
+        .process {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .step {
+            background: white;
+            padding: 30px 15px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .step.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.3);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary), #fbbf24);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+            transition: all 0.4s;
+            animation: pulseRing 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0%, 100% { box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 5px 25px rgba(245, 158, 11, 0.7); }
+        }
+
+        .step:hover .step-number {
+            transform: rotate(360deg) scale(1.2);
+        }
+
+        .step h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+            transition: color 0.4s;
+        }
+
+        .step:hover h3 {
+            color: white;
+        }
+
+        .step p {
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: color 0.4s;
+        }
+
+        .step:hover p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* DIRECTIONS */
+        .directions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .direction-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.4s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .direction-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .direction-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .direction-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .direction-card:hover .direction-image::after {
+            opacity: 1;
+        }
+
+        .direction-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+
+        .direction-card:hover .direction-image img {
+            transform: scale(1.1);
+        }
+
+        .direction-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: white;
+            color: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            z-index: 2;
+            transition: all 0.4s;
+        }
+
+        .direction-card:hover .direction-number {
+            transform: rotate(360deg) scale(1.2);
+            background: var(--secondary);
+            color: white;
+        }
+
+        .direction-content {
+            padding: 25px;
+        }
+
+        .direction-content h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .direction-content p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            background: white;
+        }
+
+        .timeline-list {
+            max-width: 900px;
+            margin: 40px auto 0;
+            position: relative;
+        }
+
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            width: 3px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            transition: height 2s ease;
+        }
+
+        .timeline-list.active::before {
+            height: 100%;
+        }
+
+        .timeline-item {
+            padding-left: 80px;
+            margin-bottom: 30px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 22px;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary);
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--secondary);
+            transition: all 0.4s;
+        }
+
+        .timeline-item:hover::before {
+            transform: scale(1.3);
+            box-shadow: 0 0 0 6px var(--secondary);
+        }
+
+        .timeline-week {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .timeline-item h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .timeline-item p {
+            color: var(--gray);
+        }
+
+        /* BUDGET TABLE */
+        .budget {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .budget-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 40px;
+        }
+
+        .budget-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            padding: 20px 30px;
+            border-bottom: 1px solid #f1f5f9;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .budget-row:not(.header):not(.total):hover {
+            background: #f8fafc;
+            transform: translateX(10px);
+        }
+
+        .budget-row.header {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+        }
+
+        .budget-row.total {
+            background: linear-gradient(90deg, var(--secondary), #fbbf24);
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
+        }
+
+        .budget-row:last-child {
+            border-bottom: none;
+        }
+
+        .budget-amount {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .budget-row.header .budget-amount,
+        .budget-row.total .budget-amount {
+            color: white;
+        }
+
+        /* TEAM */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .team-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.4s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px) rotate(-2deg);
+        }
+
+        .team-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            border: 4px solid var(--secondary);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .team-card:hover .team-avatar {
+            transform: scale(1.1) rotate(5deg);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+
+        .team-card:hover .team-avatar img {
+            transform: scale(1.1);
+        }
+
+        .team-card h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .team-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* SAFETY */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .safety-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            border-left: 5px solid #ef4444;
+            box-shadow: var(--shadow);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .safety-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.05), transparent);
+            transition: left 0.6s;
+        }
+
+        .safety-card:hover::before {
+            left: 100%;
+        }
+
+        .safety-card:hover {
+            transform: translateX(10px);
+            border-left-width: 8px;
+        }
+
+        .safety-card h4 {
+            color: #ef4444;
+            margin-bottom: 10px;
+        }
+
+        .safety-card p {
+            color: var(--gray);
+        }
+
+        /* RESULTS */
+        .results {
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results .section-title h2 {
+            color: white;
+        }
+
+        .results .section-title h2::after {
+            background: var(--secondary);
+        }
+
+        .results .section-title .label {
+            color: var(--secondary);
+        }
+
+        .results-text {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .results-image {
+            max-width: 800px;
+            margin: 40px auto 0;
+            position: relative;
+        }
+
+        .results-image::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 25px;
+            z-index: -1;
+            animation: rotate 10s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .results-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: transform 0.5s;
+        }
+
+        .results-image:hover img {
+            transform: scale(1.02);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            background-size: 200% auto;
+            animation: gradientShift 3s linear infinite;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        footer .signature {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-style: italic;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* MAGNETIC BUTTON EFFECT */
+        .magnetic {
+            transition: transform 0.3s ease;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero .slogan { font-size: 1rem; }
+            .section-title h2 { font-size: 1.8rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            .process-steps { grid-template-columns: 1fr 1fr; }
+            .budget-row { grid-template-columns: 1fr; gap: 5px; padding: 15px; }
+            .budget-row.header { display: none; }
+            .timeline-list::before { left: 20px; }
+            .timeline-item { padding-left: 60px; }
+            .timeline-item::before { left: 12px; }
+            .preloader-logo { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ PRELOADER ============ -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">BILIMDAN HAYOTGA</div>
+        <div class="preloader-bar"></div>
+    </div>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-badge">🎓 2026-yil • Amaliy Innovatsion Loyiha</span>
+            <h1>BILIMDAN HAYOTGA</h1>
+            <p class="slogan">"Har bir o'quvchi — izlanuvchi, har bir bilim — hayotdagi yechim!"</p>
+            <div class="hero-school">
+                📍 Xorazm viloyati, Qo'shko'pir tumani, 2-son umumta'lim maktabi
+            </div>
+        </div>
+    </section>
+
+    <!-- 🖼️ RASM 2: Hero rasm -->
+    <div class="hero-image reveal-scale">
+        <img src="images/2.jpg" alt="Maktab va o'quvchilar">
+    </div>
+
+    <!-- ============ STATS ============ -->
+    <section class="container">
+        <div class="stats">
+            <div class="stat-card reveal">
+                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-label">Faol o'quvchilar</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Amaliy loyihalar</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-number" data-target="4">0</div>
+                <div class="stat-label">Yo'nalishlar</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-label">Oylik tajriba</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="about">
+        <div class="container">
+            <div class="section-title reveal">
+                <span class="label">Loyiha haqida</span>
+                <h2>Loyihaning dolzarbligi</h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-text reveal-left">
+                    <p>Ta'lim jarayonida o'quvchi ko'pincha bilimni darslik, mashq va nazorat ishlari orqali egallaydi. Biroq olingan bilimni kundalik hayotdagi vaziyatlarda qo'llash, muammoni mustaqil aniqlash, dalil to'plash, yechim taklif qilish va natijani tekshirish ko'nikmalarini muntazam mashq qilish ham muhimdir.</p>
+                    <p>«Bilimdan hayotga» loyihasi fanlarda o'rganilayotgan bilimlarni maktab hayoti va kundalik turmushdagi real masalalar bilan bog'laydi. O'quvchilar jamoa bo'lib ishlaydi, kuzatish va hisob-kitob olib boradi, kichik tajribalar yoki maketlar yaratadi hamda taklif etgan yechimlarini amalda sinaydi.</p>
+                    <p>Loyiha mavjud darslar, fan to'garaklari va tarbiyaviy ishlarni almashtirmaydi; ularni amaliy topshiriqlar bilan boyitadi.</p>
+                </div>
+                <!-- 🖼️ RASM 3: Loyiha haqida -->
+                <div class="about-image reveal-right">
+                    <img src="images/3.jpg" alt="Loyiha jarayoni">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 5 STEPS PROCESS ============ -->
+    <section class="process">
+        <div class="container">
+            <div class="section-title reveal">
+                <span class="label">Asosiy mexanizm</span>
+                <h2>5 bosqichli yo'l</h2>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>MUAMMO</h3>
+                    <p>Muammoni tanlash va aniqlash</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>BILIM</h3>
+                    <p>Fanlararo tadqiqot</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>YECHIM</h3>
+                    <p>Taklif yoki model yaratish</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>SINOV</h3>
+                    <p>Amalda tekshirish</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>NATIJA</h3>
+                    <p>Dalil bilan baholash</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ DIRECTIONS ============ -->
+    <section class="container">
+        <div class="section-title reveal">
+            <span class="label">Faoliyat yo'nalishlari</span>
+            <h2>4 ta amaliy yo'nalish</h2>
+        </div>
+        <div class="directions-grid">
+            <div class="direction-card reveal">
+                <div class="direction-image">
+                    <!-- 🖼️ RASM 4: Tejamkor maktab -->
+                    <img src="images/4.jpg" alt="Tejamkor maktab">
+                    <span class="direction-number">1</span>
+                </div>
+                <div class="direction-content">
+                    <h3>💡 Tejamkor maktab</h3>
+                    <p>Maktabdagi suv, elektr va qog'ozdan foydalanish holatini kuzatish. Isrofni kamaytirish bo'yicha takliflar tayyorlash.</p>
+                </div>
+            </div>
+
+            <div class="direction-card reveal">
+                <div class="direction-image">
+                    <!-- 🖼️ RASM 5: Bilimni o'yin orqali -->
+                    <img src="images/5.jpg" alt="Bilimni o'yin orqali egalla">
+                    <span class="direction-number">2</span>
+                </div>
+                <div class="direction-content">
+                    <h3>🎲 Bilimni o'yin orqali egalla</h3>
+                    <p>Quyi sinf o'quvchilari uchun matematika va boshqa fanlardan didaktik o'yinlar, kartochkalar va boshqotirmalar yaratish.</p>
+                </div>
+            </div>
+
+            <div class="direction-card reveal">
+                <div class="direction-image">
+                    <!-- 🖼️ RASM 6: Yosh ixtirochilar -->
+                    <img src="images/6.jpg" alt="Yosh ixtirochilar">
+                    <span class="direction-number">3</span>
+                </div>
+                <div class="direction-content">
+                    <h3>🔧 Yosh ixtirochilar</h3>
+                    <p>Kundalik hayotni yengillashtiradigan oddiy, xavfsiz maketlar, qayta ishlatiladigan materiallardan buyumlar yaratish.</p>
+                </div>
+            </div>
+
+            <div class="direction-card reveal">
+                <div class="direction-image">
+                    <!-- 🖼️ RASM 7: Bir bilim - ming imkoniyat -->
+                    <img src="images/7.jpg" alt="Bir bilim - ming imkoniyat">
+                    <span class="direction-number">4</span>
+                </div>
+                <div class="direction-content">
+                    <h3>📚 Bir bilim — ming imkoniyat</h3>
+                    <p>Yuqori sinf o'quvchilari quyi sinflar uchun qisqa mini-dars, mashq to'plami yoki tushuntiruvchi ko'rgazma tayyorlaydi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TIMELINE ============ -->
+    <section class="timeline">
+        <div class="container">
+            <div class="section-title reveal">
+                <span class="label">Amalga oshirish rejasi</span>
+                <h2>3 oylik yo'l xaritasi</h2>
+            </div>
+            <div class="timeline-list">
+                <div class="timeline-item">
+                    <span class="timeline-week">1-hafta</span>
+                    <h4>Tashkiliy bosqich</h4>
+                    <p>Ishchi guruhni shakllantirish, maktab ehtiyojlarini aniqlash, takliflarni yig'ish.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">2-hafta</span>
+                    <h4>Jamoalar tuzish</h4>
+                    <p>Yo'nalishlar va jamoalarni belgilash, boshlang'ich holatni qayd etish.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">3–4-hafta</span>
+                    <h4>Tadqiqot</h4>
+                    <p>Kuzatish, so'rov, o'lchash, ma'lumot yig'ish va tahlil qilish.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">5–6-hafta</span>
+                    <h4>Yechim ishlab chiqish</h4>
+                    <p>Maket, o'quv vositasi yoki taklifni yaratish va xarajatlarni hisoblash.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">7–8-hafta</span>
+                    <h4>Sinovdan o'tkazish</h4>
+                    <p>Ustoz nazoratida sinov va fikr-mulohaza yig'ish.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">9–10-hafta</span>
+                    <h4>Natijalarni yakunlash</h4>
+                    <p>Natijalarni taqqoslash, ishlanmani yakunlash va dalillar tayyorlash.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">11–12-hafta</span>
+                    <h4>Taqdimot va hisobot</h4>
+                    <p>Loyiha taqdimoti, baholash, yakuniy hisobot va keyingi bosqich rejasi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ BUDGET ============ -->
+    <section class="budget">
+        <div class="container">
+            <div class="section-title reveal">
+                <span class="label">Moliyalashtirish</span>
+                <h2>Dastlabki budjet</h2>
+            </div>
+            <div class="budget-table reveal">
+                <div class="budget-row header">
+                    <div>Xarajat turi</div>
+                    <div class="budget-amount">Miqdori</div>
+                    <div>Izoh</div>
+                </div>
+                <div class="budget-row">
+                    <div>Laboratoriya burchagini jihozlash</div>
+                    <div class="budget-amount">800 000 so'm</div>
+                    <div>Saqlash qutilari, stend va oddiy jihozlar</div>
+                </div>
+                <div class="budget-row">
+                    <div>Konstruktor va maket materiallari</div>
+                    <div class="budget-amount">1 000 000 so'm</div>
+                    <div>Karton, yog'och, xavfsiz materiallar</div>
+                </div>
+                <div class="budget-row">
+                    <div>Ko'rgazmali vositalar</div>
+                    <div class="budget-amount">500 000 so'm</div>
+                    <div>Plakat, marker, yorliq</div>
+                </div>
+                <div class="budget-row">
+                    <div>Kantselyariya mahsulotlari</div>
+                    <div class="budget-amount">400 000 so'm</div>
+                    <div>Qog'oz, papka, ruchka</div>
+                </div>
+                <div class="budget-row">
+                    <div>Chop etish va pasportlar</div>
+                    <div class="budget-amount">300 000 so'm</div>
+                    <div>Pasport, so'rovnoma, varaqalar</div>
+                </div>
+                <div class="budget-row">
+                    <div>Oddiy tajriba va o'lchov jihozlari</div>
+                    <div class="budget-amount">1 000 000 so'm</div>
+                    <div>Ruletka, tarozi, o'lchov idishlari</div>
+                </div>
+                <div class="budget-row total">
+                    <div>JAMI</div>
+                    <div class="budget-amount">4 000 000 so'm</div>
+                    <div>Taxminiy smeta</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TEAM ============ -->
+    <section class="container">
+        <div class="section-title reveal">
+            <span class="label">Ishtirokchilar</span>
+            <h2>Loyiha jamoasi</h2>
+        </div>
+        <div class="team-grid">
+            <div class="team-card reveal">
+                <!-- 🖼️ RASM 8: Koordinator -->
+                <div class="team-avatar"><img src="images/8.jpg" alt="Koordinator"></div>
+                <h4>Loyiha koordinatori</h4>
+                <p>Umumiy reja, muddat, hamkorlik va hisobotni muvofiqlashtiradi</p>
+            </div>
+            <div class="team-card reveal">
+                <!-- 🖼️ RASM 9: Ustoz -->
+                <div class="team-avatar"><img src="images/9.jpg" alt="Ustoz"></div>
+                <h4>Fan o'qituvchisi-ustoz</h4>
+                <p>Tadqiqot va topshiriqlarning ta'limiy to'g'riligini nazorat qiladi</p>
+            </div>
+            <div class="team-card reveal">
+                <!-- 🖼️ RASM 10: O'quvchi -->
+                <div class="team-avatar"><img src="images/10.jpg" alt="O'quvchi"></div>
+                <h4>O'quvchi jamoasi</h4>
+                <p>Muammoni o'rganadi, yechim ishlab chiqadi, sinov va taqdimotni bajaradi</p>
+            </div>
+            <div class="team-card reveal">
+                <!-- 🖼️ RASM 11: Ota-ona -->
+                <div class="team-avatar"><img src="images/11.jpg" alt="Ota-ona"></div>
+                <h4>Ota-onalar / Hamjamiyat</h4>
+                <p>Maslahat, tajriba yoki mavjud resurslar bilan ko'maklashadi</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SAFETY ============ -->
+    <section class="container">
+        <div class="section-title reveal">
+            <span class="label">Xavfsizlik</span>
+            <h2>Xatarlarni boshqarish</h2>
+        </div>
+        <div class="safety-grid">
+            <div class="safety-card reveal">
+                <h4>⏰ Vaqt yetishmasligi</h4>
+                <p>Vazifalarni kichik bosqichlarga ajratish, haftalik nazorat o'rnatish.</p>
+            </div>
+            <div class="safety-card reveal">
+                <h4>📦 Materiallar yetishmasligi</h4>
+                <p>Mavjud resurslardan foydalanish, qayta ishlatiladigan xavfsiz materiallarni tanlash.</p>
+            </div>
+            <div class="safety-card reveal">
+                <h4>👥 Jamoada notenglik</h4>
+                <p>Vazifalarni yozma taqsimlash va har bir o'quvchining hissasini qayd etish.</p>
+            </div>
+            <div class="safety-card reveal">
+                <h4>📊 Kutilmagan natija</h4>
+                <p>Natijani yashirmaslik; sababini tahlil qilish va yechimni takomillashtirish.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ RESULTS ============ -->
+    <section class="results">
+        <div class="container">
+            <div class="section-title reveal">
+                <span class="label">Yakuniy samara</span>
+                <h2>Kutilayotgan natijalar</h2>
+            </div>
+            <div class="results-text reveal">
+                <p>Loyiha natijasida o'quvchilar nazariy bilimlarni amaliy vaziyatlarda qo'llash, ma'lumot yig'ish, tahlil qilish, muammoga bir nechta yechim taklif etish, jamoada ishlash va o'z fikrini dalillar bilan himoya qilish ko'nikmalarini rivojlantiradi.</p>
+                <p style="margin-top: 20px;"><strong>«Bilimdan hayotga» loyihasi maktabni faqat bilim beriladigan joy emas, balki bilim hayotiy yechimga aylanadigan muhit sifatida rivojlantirishni ko'zlaydi.</strong></p>
+            </div>
+            <!-- 🖼️ RASM 12: Natijalar -->
+            <div class="results-image reveal-scale">
+                <img src="images/12.jpg" alt="Loyiha natijalari">
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+        <p><strong>«Bilimdan hayotga»</strong> — Maktab miqyosidagi amaliy innovatsion ta'lim loyihasi</p>
+        <p>📍 Xorazm viloyati, Qo'shko'pir tumani, 2-son umumta'lim maktabi</p>
+        <p>📅 2026-yil</p>
+        <div class="signature">
+            <p>"Har bir muammo — o'rganish imkoniyati, har bir bilim — foydali yechim!"</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============ PRELOADER ============
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 1500);
+        });
+
+        // ============ SCROLL REVEAL ============
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ============ COUNTER ANIMATION ============
+        const counters = document.querySelectorAll('.stat-number');
+        let countersStarted = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersStarted) {
+                    countersStarted = true;
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000;
+                        const step = target / (duration / 16);
+                        let current = 0;
+                        
+                        const updateCounter = () => {
+                            current += step;
+                            if (current < target) {
+                                counter.textContent = Math.ceil(current) + '+';
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.textContent = target + '+';
+                            }
+                        };
+                        updateCounter();
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(c => counterObserver.observe(c));
+
+        // ============ TIMELINE ANIMATION ============
+        const timelineList = document.querySelector('.timeline-list');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    timelineList.classList.add('active');
+                    timelineItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.classList.add('active');
+                        }, index * 200);
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
+
+        timelineObserver.observe(timelineList);
+
+        // ============ STEPS STAGGER ANIMATION ============
+        const steps = document.querySelectorAll('.step');
+        const stepsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    steps.forEach((step, index) => {
+                        setTimeout(() => {
+                            step.classList.add('active');
+                        }, index * 150);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        steps.forEach(s => stepsObserver.observe(s));
+
+        // ============ 3D TILT EFFECT ============
+        const tiltCards = document.querySelectorAll('.direction-card');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // ============ PARALLAX HERO ============
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+            }
+        });
+
+        // ============ MAGNETIC EFFECT ============
+        const magneticElements = document.querySelectorAll('.hero-school, .hero-badge');
+        magneticElements.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translate(0, 0)';
+            });
+        });
+    </script>
+
+</body>
+</html>
